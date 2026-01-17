@@ -1,0 +1,100 @@
+/*
+SQL Part: Overview of sales_data from Kaggle
+*/
+--------------------------------
+-- Get an overview of the table
+--------------------------------
+PRAGMA table_info(sales_data);
+
+---------------------------------------------
+-- How many different products, categories,
+-- subcategories, and states?
+---------------------------------------------
+SELECT 
+    COUNT(*) AS total_rows,
+    COUNT(DISTINCT product) AS num_products,
+    COUNT(DISTINCT product_category) AS num_categories,
+    COUNT(DISTINCT sub_category) AS num_subcategories,
+    COUNT(DISTINCT state) AS num_states
+FROM sales_data;
+
+---------------------------------------------
+-- Show average profit and average order quantity
+---------------------------------------------
+SELECT 
+    AVG(order_quantity) AS avg_qty,
+    AVG(profit) AS avg_profit
+FROM sales_data;
+
+---------------------------------------------
+-- Which age group generates the most profit?
+---------------------------------------------
+SELECT 
+    age_group, 
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY age_group
+ORDER BY total_profit DESC;
+
+---------------------------------------------
+-- Top 10 products by total profit
+---------------------------------------------
+SELECT 
+    product, 
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY product
+ORDER BY total_profit DESC
+LIMIT 10;
+
+---------------------------------------------
+-- Total profit by month (sorted chronologically)
+---------------------------------------------
+SELECT 
+    month,
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY month
+ORDER BY 
+    CASE month
+        WHEN 'January' THEN 1
+        WHEN 'February' THEN 2
+        WHEN 'March' THEN 3
+        WHEN 'April' THEN 4
+        WHEN 'May' THEN 5
+        WHEN 'June' THEN 6
+        WHEN 'July' THEN 7
+        WHEN 'August' THEN 8
+        WHEN 'September' THEN 9
+        WHEN 'October' THEN 10
+        WHEN 'November' THEN 11
+        WHEN 'December' THEN 12
+    END;
+
+-------------------------------
+-- Dashboard SQL
+-------------------------------
+
+-- Top product categories by profit
+SELECT 
+    product_category, 
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY product_category
+ORDER BY total_profit DESC;
+
+-- Total profit by month
+SELECT 
+    month, 
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY month;
+
+-- Top profit states
+SELECT 
+    state, 
+    SUM(profit) AS total_profit
+FROM sales_data
+GROUP BY state
+ORDER BY total_profit DESC;
+	
